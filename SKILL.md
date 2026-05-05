@@ -78,11 +78,11 @@ Maintain strict technical accuracy and clean formatting for engineering content.
 
 ### 3.1 Figures, Tables, and Equations
 
-- Every figure and table must be **numbered, captioned, and referenced** from the body text by number ("as shown in Figure~3.2"), never by position ("the figure below").
-- Figure captions go **below** the figure; table captions go **above** the table — this is the IEEE convention.
-- Captions are full sentences and explain what the reader should take away, not just what the figure contains.
-- Equations are numbered when referenced; use `\eqref` (LaTeX) or "(3.1)" style. Inline math uses `$...$`; display math uses `\[...\]` or the `equation` environment.
-- Reproduce vector graphics (PDF/SVG) rather than rasterized screenshots whenever possible.
+High-level expectations only; full conventions live in §5.4 (LaTeX floats), §6 (math), and §7 (figures and tables).
+
+- Every figure and table must be **numbered, captioned, and referenced by number** from the body text — never by position.
+- Captions are full sentences that convey the take-away, not just describe contents.
+- Equations are numbered only when referenced.
 
 ---
 
@@ -110,11 +110,12 @@ When the output is intended for LaTeX compilation, follow these conventions stri
 
 ### 5.1 Quotes, Dashes, and Spacing
 
-- **Quotation marks.** Use two backticks to open and two apostrophes to close: `` ``quoted text'' ``. Single quotes use `` `text' ``. Never paste Unicode smart quotes (`" "`, `' '`) — they break compilation under `pdflatex` without `inputenc utf8` and look wrong even when they don't.
+- **Quotation marks.** See §1 — use `` ``...'' `` and `` `...' ``, never Unicode or ASCII straight quotes.
 - **Dashes.** Three lengths, three uses:
   - Hyphen `-` for compound words ("real-time").
   - En-dash `--` for ranges ("pp.~123--130", "1990--1995").
   - Em-dash `---` for parenthetical breaks in prose — like this — with no surrounding spaces.
+  - Limit the use of em-dashes in academic prose. Prefer commas, parentheses, semicolons, or sentence restructuring when the same meaning can be expressed more formally and clearly.
 - **Non-breaking space `~`.** Use between a label and its number, and between a value and its unit, to prevent line breaks: `Figure~3.2`, `Section~4.1`, `16~kHz`, `Dr.~Smith`.
 - **Sentence-ending periods after abbreviations.** After a lowercase abbreviation that is not the end of a sentence, use a backslash-space to suppress the inter-sentence stretch: `e.g.,\ FreeRTOS`, `i.e.,\ the kernel`. Or use the `\@` trick when an uppercase letter ends a sentence: `...published by NASA\@.`
 - **Ellipsis.** Use `\dots` (or `\ldots`), not three periods `...`.
@@ -131,21 +132,18 @@ When the output is intended for LaTeX compilation, follow these conventions stri
 
 ### 5.3 Math Mode
 
+LaTeX-syntax essentials only; symbol conventions, equation numbering, punctuation around equations, and multi-line layouts are covered in §6.
+
 - **Inline math** uses `$...$` or `\(...\)`. Do not use the deprecated `$$...$$` for display math; use `\[...\]` or the `equation` / `align` environments.
-- **Variables in italics, operators upright.** Use `\sin`, `\log`, `\max`, `\exp` (not `sin`, `log`); use `\mathrm{}` or `\operatorname{}` for custom operators.
-- **Differentials.** `\mathrm{d}x` (upright `d`) is the convention in IEEE and most engineering venues.
-- **Vectors and matrices.** Pick one convention (`\mathbf{x}` or `\vec{x}`) and use it consistently.
-- **Multi-letter identifiers.** Wrap in `\text{}` or `\mathit{}` to avoid LaTeX rendering them as a product of single-letter variables: `\text{loss}`, not `loss`.
-- **Punctuation belongs inside display math** when the equation ends a sentence: end with `.` or `,` inside the environment, not after `\]`.
 - Use `align` (from `amsmath`) for multi-line equations, not `eqnarray` (deprecated and badly spaced).
 
 ### 5.4 Floats: Figures, Tables, and Listings
 
-- Wrap figures and tables in `figure` / `table` floats. Use placement specifier `[htbp]` (here, top, bottom, page) — avoid `[H]` (forced placement, requires the `float` package) except when truly necessary.
-- **Caption position.** `\caption{}` goes **below** `\includegraphics` for figures and **above** `\tabular` for tables — IEEE convention.
-- **Figure files.** Prefer vector formats (`.pdf`, `.eps`, `.svg` via `svg` package) over raster (`.png`, `.jpg`). Set width relative to the text width: `\includegraphics[width=0.8\linewidth]{...}`.
-- **Tables.** Use `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) — never `\hline` or vertical bars `|`. Align numeric columns on the decimal point with `siunitx` (`S` column type) when reporting empirical results.
-- **Code listings.** Use the `listings` or `minted` package, not verbatim screenshots. Wrap long listings in `lstlisting` or `minted` environments inside a float so they can be cross-referenced.
+LaTeX mechanics only; design and authoring guidelines are in §7.
+
+- Wrap figures and tables in `figure` / `table` floats with placement specifier `[htbp]`. Avoid `[H]` (forced placement) except when truly necessary.
+- Place `\label{}` immediately after `\caption{}` inside floats, never before.
+- **Code listings.** Use the `listings` or `minted` package, not verbatim screenshots. Wrap long listings inside a float so they can be cross-referenced.
 
 ### 5.5 BibLaTeX / BibTeX
 
@@ -189,13 +187,12 @@ When the output is intended for LaTeX compilation, follow these conventions stri
 - Italicizing entire blocks of text with `{\it ...}` instead of `\emph{...}`.
 - Using `\centerline` or `\center` instead of the `center` environment.
 - Mixing `\bf`, `\it`, `\rm` (deprecated TeX commands) with `\textbf`, `\textit`, `\textrm` (modern LaTeX commands).
-- Putting `\label{}` before `\caption{}` inside a float — silently captures the wrong counter.
 
 ---
 
 ## 6. Mathematical Notation and Equations
 
-These conventions apply to academic math regardless of typesetting tool, but the LaTeX hints assume the `amsmath` package is loaded. They build on §5.3 (LaTeX math syntax).
+These conventions apply to academic math regardless of typesetting tool, but the LaTeX hints assume the `amsmath` package is loaded.
 
 ### 6.1 Symbol Conventions
 
@@ -207,7 +204,7 @@ These conventions apply to academic math regardless of typesetting tool, but the
 - **Functions and operators:** named operators are upright. Use `\sin`, `\cos`, `\log`, `\exp`, `\max`, `\min`, `\arg\max`, `\arg\min`. For custom operators, declare with `\DeclareMathOperator{\softmax}{softmax}` in the preamble and call as `\softmax(\cdot)`.
 - **Constants vs. variables:** mathematical constants are upright (`\mathrm{e}`, `\mathrm{i}`, `\pi` is conventionally italic by tradition). The differential `d` is upright in IEEE/engineering style: `\mathrm{d}x`.
 - **Probability:** `\Pr(A)` or `\mathbb{P}(A)`; expectation `\mathbb{E}[X]`; variance `\mathrm{Var}(X)`. Conditional bars use `\mid` (correct spacing), not `|`.
-- **Multi-letter identifiers** must be wrapped in `\text{}` or `\mathrm{}` to avoid being typeset as a product: `\text{loss}`, `\mathrm{MSE}`, `\mathrm{IoU}` — never `loss` or `MSE` raw in math mode.
+- **Multi-letter identifiers** must be wrapped in `\text{}` or `\mathrm{}` to avoid being typeset as a product: `\text{loss}`, `\mathrm{MSE}`, `\mathrm{IoU}` — never `loss` or `MSE` raw in math mode. This also applies to subscripts: `x_{\text{train}}`, not `x_{train}`.
 
 ### 6.2 Equation Numbering
 
@@ -309,7 +306,6 @@ For thesis chapters with formal results, use `amsthm` environments:
 
 ### 6.10 Common Math-Writing Pitfalls
 
-- **Bare numbers in math mode for non-mathematical content.** Use `\text{}`: `x_{\text{train}}`, not `x_{train}` (which renders `t`, `r`, `a`, `i`, `n` as a product).
 - **Unbalanced delimiters.** `\left(` must pair with `\right)`. Use `\right.` or `\left.` for invisible counterparts.
 - **Mixing notation.** Do not switch between `\mathbf{x}` and `\vec{x}` for the same vector across chapters.
 - **Reusing letters.** Do not let `n` mean both "sample count" and "dimensionality" in the same chapter.
@@ -322,7 +318,7 @@ For thesis chapters with formal results, use `amsthm` environments:
 
 ## 7. Figures and Tables
 
-Figures and tables are first-class content, not decoration. They must be designed, captioned, and referenced with the same care as the prose. The conventions below extend the brief rules in §3.1 (academic) and §5.4 (LaTeX).
+Figures and tables are first-class content, not decoration. This section is the section of record for figure and table conventions; §3.1 and §5.4 only state the high-level expectation and the float mechanics.
 
 ### 7.1 When to Use a Figure vs. a Table vs. Prose
 
@@ -335,7 +331,7 @@ Figures and tables are first-class content, not decoration. They must be designe
 ### 7.2 Figure Design
 
 - **File format.** Use vector formats — PDF, EPS, SVG (via the `svg` package or pre-rendered) — for plots, diagrams, and schematics. Use raster (PNG, JPG) only for photographs or screenshots that genuinely contain pixel data. Never embed JPG for line art (compression artifacts on edges).
-- **Resolution.** Raster figures should be at least 300~dpi at the printed size. A figure rendered at 1200×800 px and shrunk to 8~cm wide will look crisp; one rendered at 300×200 and stretched will not.
+- **Resolution.** Raster figures should be at least 300~dpi at the printed size.
 - **Source files.** Keep the script or source that generated each figure (`*.py`, `*.gnuplot`, `*.tex` with TikZ) inside a `figures/src/` directory. Any figure that cannot be regenerated from source is a liability for revision.
 - **Sizing.** Use `\includegraphics[width=0.8\linewidth]{...}` (relative to text width), not absolute centimeters. Single-column figures: `0.8\linewidth`; full-width across both columns of a two-column layout: `\textwidth` inside `figure*`.
 - **Typography in figures.** Match the body text font and size where possible. Axis labels and legends should be readable at the printed size — a rule of thumb: if axis tick labels are smaller than the body text, the figure is too dense.
@@ -346,7 +342,7 @@ Figures and tables are first-class content, not decoration. They must be designe
 
 ### 7.3 Table Design
 
-- **Use `booktabs`.** Three rules — `\toprule`, `\midrule`, `\bottomrule` — and nothing else. Never `\hline`, never vertical bars `|`, never double rules. A clean booktabs table looks professional; the default LaTeX table does not.
+- **Use `booktabs`.** Three rules — `\toprule`, `\midrule`, `\bottomrule` — and nothing else. Never `\hline`, never vertical bars `|`, never double rules.
 - **Alignment.** Left-align text columns, right-align integer columns, decimal-align numeric columns with `siunitx`'s `S` column type. Center-align only for short categorical labels.
 - **Units in the header**, not in every cell. "Latency (ms)" in the column header beats "12.3~ms / 14.7~ms / ..." down the column.
 - **Significant figures.** Be consistent within a column. Reporting "91.4, 87, 89.23" mixes precisions and looks careless — pick one and stick to it.
@@ -373,8 +369,8 @@ Figures and tables are first-class content, not decoration. They must be designe
 
 ### 7.6 Placement and Floats
 
-- Use placement specifier `[htbp]` (here, top of next page, bottom of next page, dedicated float page) on every `figure` and `table` environment.
-- Avoid `[H]` (forced placement, requires the `float` package) — it creates ugly white space and poor page balance. Trust LaTeX's float algorithm.
+Float mechanics (placement specifiers, `\label`/`\caption` order) are covered in §5.4. A few authoring-level points:
+
 - Place the `\begin{figure}` / `\begin{table}` block **near, but not necessarily adjacent to**, the first prose reference. LaTeX will move it to a good location.
 - If LaTeX is starving floats (deferring them to the end), use `\clearpage` at the end of a section to flush pending floats before moving on.
 
