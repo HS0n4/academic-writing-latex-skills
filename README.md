@@ -26,15 +26,15 @@ See [SKILL.md](SKILL.md) for the complete behavioral specification.
 Place the skill inside the project where you want it active:
 
 ```bash
-mkdir -p .claude/skills/academic-writing-latex
-cp SKILL.md .claude/skills/academic-writing-latex/SKILL.md
+mkdir -p .claude/skills/academic-writing-latex-skills
+cp SKILL.md .claude/skills/academic-writing-latex-skills/SKILL.md
 ```
 
 ### Claude Code (user-level, available in every project)
 
 ```bash
-mkdir -p ~/.claude/skills/academic-writing-latex
-cp SKILL.md ~/.claude/skills/academic-writing-latex/SKILL.md
+mkdir -p ~/.claude/skills/academic-writing-latex-skills
+cp SKILL.md ~/.claude/skills/academic-writing-latex-skills/SKILL.md
 ```
 
 ### Claude.ai / Claude Desktop
